@@ -1,0 +1,46 @@
+@page "/user-role"
+@using System.Security.Claims
+@inject JwtAuthenticationStateProvider AuthStateProvider
+
+<h3>User Role Information</h3>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (!isAuthenticated)
+{
+    <p>You are not authenticated.</p>
+}
+else if (!string.IsNullOrEmpty(UserRole))
+{
+    <p><strong>Role:</strong> @UserRole</p>
+}
+else
+{
+    <p>No role claim found.</p>
+}
+
+@code {
+    private string? UserRole;
+    private bool isAuthenticated;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        isAuthenticated = user.Identity?.IsAuthenticated ?? false;
+
+        if (isAuthenticated)
+        {
+            // Common claim type for roles; you might need to adjust this if your token uses a different schema
+            UserRole = user.FindFirst(c =>
+            c.Type == ClaimTypes.Role || c.Type == "role" || c.Type.Contains("claims/role")
+            )?.Value;
+        }
+
+        isLoading = false;
+    }
+}

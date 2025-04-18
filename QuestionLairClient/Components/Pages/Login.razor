@@ -1,0 +1,64 @@
+@page "/login"
+@using System.ComponentModel.DataAnnotations
+
+@inject NavigationManager Navigation
+@inject AuthService AuthService
+@inject ILogger<Login> Logger
+
+@layout LoginLayout
+
+<PageTitle>Host login</PageTitle>
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit" style="width: 400px;">
+    <DataAnnotationsValidator />
+
+
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h5">Login</MudText>
+        </MudCardHeader>
+
+        <MudCardContent>
+            <MudTextField Label="Email" Class="mt-3" @bind-Value="model.Email" For="@(() => model.Email)" />
+            <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                Login</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</EditForm>
+
+@code {
+    RegisterAccountForm model = new RegisterAccountForm();
+    bool success;
+
+    public class RegisterAccountForm
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        @* [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 0)] *@
+        public string Password { get; set; }
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        StateHasChanged();
+
+        success = await AuthService.LoginAsync(model.Email, model.Password);
+
+        if (success)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            Logger.LogWarning("Login failed for user {Email}.", model.Email);
+        }
+    }
+}
