@@ -8,8 +8,8 @@
     <DialogContent>
         <MudForm Model="@model" @ref="@form" Validation="@(orderValidator.ValidateValue)" ValidationDelay="0">
             <MudCardContent>
-                <MudTextField @bind-Value="model.RoomName" For="@(() => model.RoomName)" Immediate="true"
-                    Label="RoomName" />
+                <MudTextField @bind-Value="model.CourseName" For="@(() => model.CourseName)" Immediate="true"
+                    Label="CourseName" />
 
                 <MudTextField @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password"
                     Immediate="true" Label="Password" />
@@ -35,7 +35,7 @@
 
     public class OrderModel
     {
-        public string RoomName { get; set; }
+        public string CourseName { get; set; }
         public string Password { get; set; }
     }
 
@@ -58,7 +58,7 @@
     {
         public OrderModelFluentValidator()
         {
-            RuleFor(x => x.RoomName)
+            RuleFor(x => x.CourseName)
             .NotEmpty()
             .Length(1, 100);
 

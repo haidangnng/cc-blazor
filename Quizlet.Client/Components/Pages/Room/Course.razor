@@ -1,13 +1,13 @@
-@page "/room"
+@page "/course"
 
 @inject IDialogService DialogService
 
-<PageTitle>Room</PageTitle>
+<PageTitle>Course</PageTitle>
 
 <div style="height: 100%; width: 100%">
     <MudStack>
         @* <RoomContainer Title="Recent Rooms"></RoomContainer> *@
-        <RoomContainer Title="Rooms"></RoomContainer>
+        <CourseContainer Title="Rooms"></CourseContainer>
     </MudStack>
 
     <MudFab @onclick="OpenDialogAsync" StartIcon="@Icons.Material.Filled.Create" Label="Create Room"
@@ -19,6 +19,6 @@
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<CreateRoomDialog>("Simple Dialog", options);
+        return DialogService.ShowAsync<CreateCourseDialog>("Simple Dialog", options);
     }
 }

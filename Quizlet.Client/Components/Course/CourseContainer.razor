@@ -13,8 +13,6 @@
                     <MudCardContent>
                         <MudText Typo="Typo.h6">@item.Name</MudText>
                         <MudText Typo="Typo.caption">ID: @item.Id</MudText>
-                        <MudText Typo="Typo.caption">Password: @item.Password</MudText>
-                        <MudText Typo="Typo.caption">Sources: @item.Sources</MudText>
                     </MudCardContent>
                 </MudCard>
             }
@@ -36,5 +34,5 @@
     public string Title { get; set; } = "Room Container"; // default fallback
 
     [Parameter]
-    public List<Room> Items { get; set; }
+    public List<Course> Items { get; set; }
 }

@@ -1,8 +1,8 @@
-@page "/room/{Id}"
+@page "/course/{Id}"
 
-<PageTitle>Room detail</PageTitle>
+<PageTitle>Course detail</PageTitle>
 
-<h1>Room detail</h1>
+<h1>Course detail</h1>
 
 <div class="pa-2">
     <div class="d-flex justify-space-between align-center" style="width: 100%;">
@@ -85,5 +85,5 @@
     [Parameter]
     public string? Id { get; set; }
 
-    public List<Room> Items { get; set; } = [];
+    public List<Course> Items { get; set; } = [];
 }
