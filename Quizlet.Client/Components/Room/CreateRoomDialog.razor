@@ -1,0 +1,88 @@
+@using FluentValidation
+@using System.ComponentModel.DataAnnotations
+
+<MudDialog>
+    <TitleContent>
+        Create Room
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@model" @ref="@form" Validation="@(orderValidator.ValidateValue)" ValidationDelay="0">
+            <MudCardContent>
+                <MudTextField @bind-Value="model.RoomName" For="@(() => model.RoomName)" Immediate="true"
+                    Label="RoomName" />
+
+                <MudTextField @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password"
+                    Immediate="true" Label="Password" />
+
+            </MudCardContent>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        @* <MudButton OnClick="Cancel">Cancel</MudButton> *@
+        <MudButton Color="Color.Primary" OnClick="@(async () => await Submit())">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    MudForm form;
+
+    OrderModelFluentValidator orderValidator = new OrderModelFluentValidator();
+
+    OrderModel model = new OrderModel();
+
+    public class OrderModel
+    {
+        public string RoomName { get; set; }
+        public string Password { get; set; }
+    }
+
+
+    private async Task Submit()
+    {
+        await form.Validate();
+
+        @* if (form.IsValid)
+        {
+            Snackbar.Add("Submitted!");
+        } *@
+    }
+
+    /// <summary>
+    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
+    /// </summary>
+    /// <typeparam name="OrderModel"></typeparam>
+    public class OrderModelFluentValidator : AbstractValidator<OrderModel>
+    {
+        public OrderModelFluentValidator()
+        {
+            RuleFor(x => x.RoomName)
+            .NotEmpty()
+            .Length(1, 100);
+
+            RuleFor(x => x.Password)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .MustAsync(async (value, cancellationToken) => await IsUniqueAsync(value));
+        }
+
+        private async Task<bool> IsUniqueAsync(string email)
+        {
+            // Simulates a long running http call
+            await Task.Delay(2000);
+            return email.ToLower() != "test@test.com";
+        }
+
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<OrderModel>.CreateWithOptions((OrderModel)model, x =>
+    x.IncludeProperties(propertyName)));
+            if (result.IsValid)
+                return Array.Empty<string>();
+            return result.Errors.Select(e => e.ErrorMessage);
+        };
+    }
+    private void Cancel() => MudDialog.Cancel();
+}

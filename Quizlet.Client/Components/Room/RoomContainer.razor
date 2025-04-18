@@ -1,0 +1,40 @@
+<div class="pa-2">
+    <MudText Typo="Typo.h5" Class="mb-4">@Title</MudText>
+
+    <div style="width: 100%; border: 1px solid;" class="my-4" />
+
+
+    @if (Items != null && Items.Any())
+    {
+        <div class="mud-grid mud-grid-spacing-xs-2">
+            @foreach (var item in Items)
+            {
+                <MudCard Class="p-4 mud-width-full">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">@item.Name</MudText>
+                        <MudText Typo="Typo.caption">ID: @item.Id</MudText>
+                        <MudText Typo="Typo.caption">Password: @item.Password</MudText>
+                        <MudText Typo="Typo.caption">Sources: @item.Sources</MudText>
+                    </MudCardContent>
+                </MudCard>
+            }
+        </div>
+    }
+    else
+    {
+        <MudPaper Class="pa-4">
+            <MudStack AlignItems="AlignItems.Center">
+                <MudIcon Size="Size.Large" Icon="@Icons.Material.Filled.ImageNotSupported" Title="Empty" />
+                <MudText Typo="Typo.h5">No room available</MudText>
+            </MudStack>
+        </MudPaper> <!-- Or something like <MudText>No rooms available</MudText> -->
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "Room Container"; // default fallback
+
+    [Parameter]
+    public List<Room> Items { get; set; }
+}

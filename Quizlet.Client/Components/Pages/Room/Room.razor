@@ -1,0 +1,24 @@
+@page "/room"
+
+@inject IDialogService DialogService
+
+<PageTitle>Room</PageTitle>
+
+<div style="height: 100%; width: 100%">
+    <MudStack>
+        @* <RoomContainer Title="Recent Rooms"></RoomContainer> *@
+        <RoomContainer Title="Rooms"></RoomContainer>
+    </MudStack>
+
+    <MudFab @onclick="OpenDialogAsync" StartIcon="@Icons.Material.Filled.Create" Label="Create Room"
+        Color="Color.Tertiary" Class="absolute" Style="bottom:12px;right:12px" />
+</div>
+
+@code {
+    private Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<CreateRoomDialog>("Simple Dialog", options);
+    }
+}
